@@ -91,25 +91,20 @@ def infer(expr, env):
 
 def main():
     if len(sys.argv) > 1 and sys.argv[1] == "--test":
-        global _counter; _counter = 0
         # int literal
         _, t = infer(EInt(42), {})
         assert isinstance(t, TInt)
         # identity function
-        _counter = 0
         _, t = infer(ELam("x", EVar("x")), {})
         assert isinstance(t, TFun)
         # application
-        _counter = 0
         _, t = infer(EApp(ELam("x", EVar("x")), EInt(5)), {})
         assert isinstance(t, TInt), f"Got {t}"
         # let
-        _counter = 0
         _, t = infer(ELet("id", ELam("x", EVar("x")), EApp(EVar("id"), EInt(3))), {})
         assert isinstance(t, TInt)
         print("All tests passed!")
     else:
-        global _counter; _counter = 0
         _, t = infer(ELam("f", ELam("x", EApp(EVar("f"), EVar("x")))), {})
         print(f"λf. λx. f x : {t}")
 
